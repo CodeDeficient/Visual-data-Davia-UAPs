@@ -32,7 +32,18 @@ This document serves as the master index for all project documentation related t
 
 ## IV. Foundational Concept
 
-16. **[initial_concept.md](initial_concept.md)**: The initial conversation and brainstorming document that sparked the project.
+16. **[initial_concept.md](../initial_concept.md)**: The initial conversation and brainstorming document that sparked the project.
+
+## V. Local Davia SDK Documentation Reference
+
+This section provides links to locally saved copies of key Davia SDK documentation pages for quick reference during development.
+
+17. **[Davia SDK: Introduction](davia_sdk_docs/00_introduction.md)**
+18. **[Davia SDK: Debugging Tasks](davia_sdk_docs/01_debugging_tasks.md)**
+19. **[Davia SDK: Deploying the Interface](davia_sdk_docs/02_deploying_the_interface.md)**
+20. **[Davia SDK: Quickstart](davia_sdk_docs/03_quickstart.md)**
+21. **[Davia SDK: Defining Tasks](davia_sdk_docs/04_defining_tasks.md)**
+22. **[Davia SDK: Adding AI Agents / Defining Graphs](davia_sdk_docs/05_adding_ai_agents_defining_graphs.md)**
 
 ---
 This index provides a clear navigational structure for all project-related documentation.
