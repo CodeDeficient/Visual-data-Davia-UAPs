@@ -12,6 +12,7 @@ This document outlines the technical architecture for the Interactive UFO/UAP Si
 *   **Scalability:** Utilize serverless platforms (Vercel, Google Cloud Run) that can scale with demand (though primarily targeting free-tier capabilities for this project).
 *   **Maintainability:** Ensure components are well-defined and code is organized for ease of understanding and future modifications.
 *   **Deployability:** Streamline the deployment process for both frontend and backend components.
+*   **Rapid UI Development:** Leverage the Davia SDK to significantly accelerate frontend development by automatically generating the UI from the backend's OpenAPI specification, allowing focus on Python-based backend logic.
 *   **Cost-Effectiveness:** Prioritize the use of free-tier services.
 *   **Adherence to Davia Paradigm:** Follow the Davia model where the backend API (defined by an OpenAPI spec) drives the frontend UI.
 
