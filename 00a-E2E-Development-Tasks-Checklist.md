@@ -2,194 +2,265 @@
 
 ## Project Title: Interactive UFO/UAP Sightings Explorer & AI Analyst
 
-This checklist provides a detailed breakdown of key end-to-end development tasks. It serves as a granular reference for tracking progress through major project milestones. For specific code implementations, refer to Context7 and Tavily MCP tools for relevant snippets and best practices.
+This checklist provides a highly detailed, atomic breakdown of key end-to-end development tasks. It serves as a granular reference for tracking progress. For specific code implementations, refer to Context7 and Tavily MCP tools for relevant snippets and best practices. For frontend debugging, utilize the AgentDeskAI Browser Tools MCP.
 
 ---
 
 ### Phase 1: Project Initiation & Planning
 - [ ] **1.1:** Project Scope & Objectives Defined and Understood (per `00-Project-Governance-and-Scope.md`).
+    - [ ] **1.1.1:** Re-read Davia AI job application requirements carefully.
+    - [ ] **1.1.2:** Confirm alignment of `initial_concept.md` with job requirements.
+    - [ ] **1.1.3:** Finalize project goal and core objectives in `00-Project-Governance-and-Scope.md`.
 - [ ] **1.2:** Initial Research on Davia SDK, Vercel, and Google Cloud Run Completed.
-    - [ ] **1.2.1:** Davia SDK documentation and examples reviewed. (Tool: Tavily for Davia official docs)
-    - [ ] **1.2.2:** Vercel & Google Cloud Run deployment patterns for Python/FastAPI reviewed. (Tool: Tavily, Context7 for FastAPI deployment)
+    - [ ] **1.2.1:** Davia SDK: Review official documentation for UI generation from OpenAPI. (Tool: Tavily)
+    - [ ] **1.2.2:** Davia SDK: Look for example projects or tutorials. (Tool: Tavily, GitHub search)
+    - [ ] **1.2.3:** Vercel: Review deployment docs for Python/static frontends (if Davia outputs static assets) or framework-specific builds. (Tool: Tavily)
+    - [ ] **1.2.4:** Google Cloud Run: Review deployment docs for containerized Python/FastAPI apps. (Tool: Tavily, Context7 for FastAPI deployment)
 - [ ] **1.3:** All Core Project Documentation (as per `00b-Master-Documentation-Index.md`) Drafted.
 - [ ] **1.4:** Ancillary PM Documents Drafted.
-- [ ] **(NEW)** `00a-E2E-Development-Tasks-Checklist.md` (This Document) Updated with detailed breakdown.
-- [ ] **(NEW)** `00b-Master-Documentation-Index.md` Created and finalized.
+- [ ] `00a-E2E-Development-Tasks-Checklist.md` (This Document) Updated with this detailed breakdown.
+- [ ] `00b-Master-Documentation-Index.md` Created and finalized.
 
-### Phase 2: Data Acquisition & Preprocessing
-- [ ] **2.1:** NUFORC UFO Sightings Dataset Identified and Downloaded.
-    - [ ] **2.1.1:** Search public dataset repositories (e.g., Kaggle, Data.gov) for "NUFORC UFO Sightings". (Tool: Tavily)
-    - [ ] **2.1.2:** Evaluate dataset versions (completeness, recency, license).
-    - [ ] **2.1.3:** Download chosen dataset (likely CSV format).
-    - [ ] **2.1.4:** Store raw dataset locally (e.g., in `data/raw/`).
-- [ ] **2.2:** Exploratory Data Analysis (EDA) on Raw Dataset Completed.
-    - [ ] **2.2.1:** Load raw data into Pandas DataFrame. (Tool: Context7 for Pandas CSV reading snippets)
-    - [ ] **2.2.2:** Perform initial data inspection (`.head()`, `.info()`, `.describe()`, `shape`).
-    - [ ] **2.2.3:** Identify column data types, potential inconsistencies.
-    - [ ] **2.2.4:** Analyze missing value patterns (`.isnull().sum()`).
-    - [ ] **2.2.5:** Conduct basic univariate analysis (histograms, value counts). (Tool: Context7 for Pandas/Matplotlib/Seaborn plotting snippets)
-    - [ ] **2.2.6:** Identify potential outliers or erroneous data points.
-    - [ ] **2.2.7:** Document EDA findings and preprocessing decisions.
-- [ ] **2.3:** Python Script for Data Cleaning and Preprocessing Developed.
-    - [ ] **2.3.1:** Define script structure (functions for modularity).
-    - [ ] **2.3.2:** Implement column selection/renaming as per `05-Data-Schema-and-Preprocessing.md`.
-    - [ ] **2.3.3:** Implement data type conversions (datetime, numeric, string). (Tool: Context7 for Pandas `to_datetime`, `to_numeric`, `astype` snippets)
-        - [ ] **2.3.3.1:** Edge Case: Handle unparseable dates (e.g., set to NaT, log error).
-        - [ ] **2.3.3.2:** Edge Case: Handle non-numeric values in intended numeric columns (e.g., coerce to NaN, log error).
-    - [ ] **2.3.4:** Implement string cleaning (trim whitespace, standardize case for filterable fields like city, state, country, shape).
-    - [ ] **2.3.5:** Implement missing value handling strategy (e.g., fill with "Unknown", drop rows, simple imputation).
-        - [ ] **2.3.5.1:** Edge Case: Decide handling for missing geo-coordinates (critical for map features).
-    - [ ] **2.3.6:** Implement duration parsing/conversion to `duration_seconds`.
-        - [ ] **2.3.6.1:** Edge Case: Handle varied text descriptions of duration (e.g., "few minutes", "approx 1 hour").
-    - [ ] **2.3.7:** Implement latitude/longitude validation (range checks).
-    - [ ] **2.3.8:** (Optional) Implement outlier capping/handling if identified in EDA.
-    - [ ] **2.3.9:** Add logging for significant cleaning actions or data discards.
-- [ ] **2.4:** `nuforc_data.parquet` File Generated.
-    - [ ] **2.4.1:** Execute preprocessing script on the raw dataset.
-    - [ ] **2.4.2:** Save cleaned DataFrame to Parquet format. (Tool: Context7 for Pandas `to_parquet` snippets, including compression options like 'snappy' or 'gzip').
-    - [ ] **2.4.3:** Verify Parquet file integrity and schema.
-- [ ] **2.5:** Preprocessing Steps Fully Documented in `05-Data-Schema-and-Preprocessing.md`.
+### Phase 2: Data Acquisition & Preprocessing (Assumed largely complete based on previous work, minor checks)
+- [ ] **2.1 - 2.5:** Verify all sub-tasks for Data Acquisition & Preprocessing are complete and documented in `05-Data-Schema-and-Preprocessing.md`.
+    - [ ] **2.X.1:** Confirm `nuforc_data.parquet` exists and is accessible.
+    - [ ] **2.X.2:** Briefly review preprocessing script logic for clarity.
 
-### Phase 3: Backend API Development (Python/FastAPI)
-- [ ] **3.1:** Backend Project Structure Setup.
-    - [ ] **3.1.1:** Create main backend directory (e.g., `backend/`).
-    - [ ] **3.1.2:** Initialize Python virtual environment.
-    - [ ] **3.1.3:** Create subdirectories (`app/`, `app/data/`, `tests/`, optional `app/routers/`).
-    - [ ] **3.1.4:** Create initial `app/main.py` with basic FastAPI app instance. (Tool: Context7 for FastAPI "hello world" snippet)
-    - [ ] **3.1.5:** Create initial `requirements.txt` (`fastapi`, `uvicorn`, `pandas`, `pyarrow`).
-    - [ ] **3.1.6:** Create `.gitignore` file.
-- [ ] **3.2:** Data Loading Mechanism (`nuforc_data.parquet`) Implemented.
-    - [ ] **3.2.1:** Place `nuforc_data.parquet` in `backend/app/data/`.
-    - [ ] **3.2.2:** Implement function/class to load Parquet into Pandas DataFrame (e.g., on FastAPI app startup via lifespan event, or cached on first request). (Tool: Context7 for FastAPI lifespan events & Pandas Parquet reading)
-        - [ ] **3.2.2.1:** Edge Case: Handle `FileNotFoundError` for Parquet file.
-        - [ ] **3.2.2.2:** Consider global DataFrame variable or dependency injection for access in path operations.
-- [ ] **3.3:** Core API Endpoints Developed (as per `04-API-Documentation-Standards.md`):
-    - [ ] **3.3.1:** General for all endpoints:
-        - [ ] **3.3.1.1:** Define Pydantic models for request/response schemas. (Tool: Context7 for Pydantic model examples)
-        - [ ] **3.3.1.2:** Implement FastAPI path operations (`@app.get`, `@app.post`). (Tool: Context7 for FastAPI routing)
-        - [ ] **3.3.1.3:** Implement basic try-except error handling, returning appropriate HTTP status codes.
-        - [ ] **3.3.1.4:** Ensure OpenAPI schema is correctly generated and self-documenting.
-    - [ ] **3.3.2:** `/sightings` (GET) endpoint:
-        - [ ] **3.3.2.1:** Implement query parameters for filtering (date range, shape, state, country), sorting, pagination. (Tool: Context7 for FastAPI query parameters, `Query` examples)
-        - [ ] **3.3.2.2:** Implement logic to apply filters to the DataFrame.
-            - [ ] **3.3.2.2.1:** Edge Case: Handle empty/no filters (return all/paginated data).
-            - [ ] **3.3.2.2.2:** Edge Case: Handle invalid/malformed filter values (Pydantic validation helps).
-            - [ ] **3.3.2.2.3:** Edge Case: Case-insensitive filtering for text fields.
-        - [ ] **3.3.2.3:** Implement sorting logic based on query parameters.
-        - [ ] **3.3.2.4:** Implement pagination logic (limit/offset).
-        - [ ] **3.3.2.5:** Format response using Pydantic schema.
-    - [ ] **3.3.3:** `/summary-metrics` (GET) endpoint:
-        - [ ] **3.3.3.1:** Implement query parameters for filtering (consistent with `/sightings`).
-        - [ ] **3.3.3.2:** Implement logic to calculate summary metrics (total sightings, common shape, busiest month) on the (filtered) DataFrame.
-        - [ ] **3.3.3.3:** Format response using Pydantic schema.
-    - [ ] **3.3.4:** `/filter-options` (GET) endpoint:
-        - [ ] **3.3.4.1:** Implement logic to extract unique, sorted values for filter dropdowns (shapes, states, countries) from the DataFrame.
-        - [ ] **3.3.4.2:** Format response using Pydantic schema.
-    - [ ] **3.3.5:** `/ai-query` (POST) endpoint:
-        - [ ] **3.3.5.1:** Define Pydantic model for request body (`query_text`).
-        - [ ] **3.3.5.2:** Implement rule-based parsing of `query_text` (e.g., regex, keyword spotting).
-        - [ ] **3.3.5.3:** Implement logic to map parsed queries to actions (data filtering, metric calculation).
-        - [ ] **3.3.5.4:** Format response (textual answer, updated_filters object, visualization_hint) using Pydantic schema.
-            - [ ] **3.3.5.4.1:** Edge Case: Handle queries not matching any rules (return a polite "cannot understand" message).
-- [ ] **3.6:** Pydantic Models for All Request/Response Validation Implemented and Verified. (Cross-check with 3.3.1.1)
-- [ ] **3.7:** OpenAPI Specification Generation in FastAPI Configured and Verified.
-    - [ ] **3.7.1:** Customize OpenAPI metadata (title, version, description, server URL) in `main.py`. (Tool: Context7 for FastAPI `openapi_tags`, `openapi_prefix` examples)
-    - [ ] **3.7.2:** Regularly review auto-generated `/docs` and `/openapi.json`.
-- [ ] **3.8:** Backend Unit Tests Developed and Passing using `pytest`.
-    - [ ] **3.8.1:** Set up `pytest` environment and `tests/` directory.
-    - [ ] **3.8.2:** Write tests for data loading and DataFrame integrity.
-    - [ ] **3.8.3:** Write tests for API endpoints using FastAPI's `TestClient`. (Tool: Context7 for `TestClient` usage)
-        - [ ] **3.8.3.1:** Test successful (200 OK) responses for each endpoint.
-        - [ ] **3.8.3.2:** Test various filter combinations for `/sightings` and `/summary-metrics`.
-        - [ ] **3.8.3.3:** Test pagination and sorting for `/sightings`.
-        - [ ] **3.8.3.4:** Test error conditions (e.g., invalid input types, 422 Unprocessable Entity from Pydantic).
-        - [ ] **3.8.3.5:** Test `/ai-query` with queries matching rules and not matching rules.
-    - [ ] **3.8.4:** Write unit tests for complex helper functions (if any).
-    - [ ] **3.8.5:** Aim for good test coverage of critical paths.
-- [ ] **3.9:** `Dockerfile` for Backend Application Created and Tested Locally.
-    - [ ] **3.9.1:** Create `Dockerfile` as per `09-Deployment-DevOps-Guide.md`. (Tool: Context7 for Python/FastAPI Dockerfile examples)
-    - [ ] **3.9.2:** Ensure `nuforc_data.parquet` is correctly copied into the image.
-    - [ ] **3.9.3:** Build Docker image locally (`docker build . -t ufo-api`).
-    - [ ] **3.9.4:** Run container locally (`docker run -p 8000:80 ufo-api`) and test API.
-        - [ ] **3.9.4.1:** Edge Case: Verify correct port mapping and app startup within container.
-- [ ] **3.10:** `requirements.txt` Finalized with pinned/compatible versions. (Tool: Context7 for `pip freeze` or version pinning strategies)
+### Phase 3: Backend API Development (Python/FastAPI) - Ultra Granular
+- [ ] **3.1:** Backend Project Structure Setup:
+    - [ ] **3.1.1:** Confirm `backend/` directory exists.
+    - [ ] **3.1.2:** Confirm Python virtual environment is active.
+    - [ ] **3.1.3:** Confirm subdirectories (`app/`, `app/data/`, `tests/`) exist.
+    - [ ] **3.1.4:** Confirm `app/main.py` contains basic FastAPI app instance.
+    - [ ] **3.1.5:** Confirm `requirements.txt` lists `fastapi`, `uvicorn`, `pandas`, `pyarrow`.
+    - [ ] **3.1.6:** Confirm `.gitignore` exists and includes `__pycache__/`, `*.pyc`, `.venv/`, etc.
+- [ ] **3.2:** Data Loading Mechanism (`nuforc_data.parquet`):
+    - [ ] **3.2.1:** Confirm `nuforc_data.parquet` is in `backend/app/data/`.
+    - [ ] **3.2.2:** Design data loading strategy (lifespan event or on-demand with caching).
+    - [ ] **3.2.3:** Implement data loading function in `app/main.py` or a utility module. (Tool: Context7 for Pandas `read_parquet`)
+    - [ ] **3.2.4:** Implement error handling for `FileNotFoundError` during data load.
+    - [ ] **3.2.5:** Implement FastAPI lifespan event to load data on startup. (Tool: Context7 for FastAPI lifespan)
+    - [ ] **3.2.6:** Make DataFrame accessible to path operations (e.g., global variable, dependency injection).
+- [ ] **3.3:** Core API Endpoints Development:
+    - [ ] **3.3.A:** `/filter-options` (GET) Endpoint:
+        - [ ] **3.3.A.1:** Define Pydantic response model for filter options (e.g., `FilterOptionsResponse` with lists for shapes, states, countries). (Tool: Context7 for Pydantic)
+        - [ ] **3.3.A.2:** Create path operation function in `app/main.py` (or a router).
+        - [ ] **3.3.A.3:** Implement logic to get unique sorted lists of shapes from DataFrame.
+        - [ ] **3.3.A.4:** Implement logic to get unique sorted lists of states from DataFrame.
+        - [ ] **3.3.A.5:** Implement logic to get unique sorted lists of countries from DataFrame.
+        - [ ] **3.3.A.6:** Populate and return the Pydantic response model.
+        - [ ] **3.3.A.7:** Add basic try-except for unexpected errors.
+    - [ ] **3.3.B:** `/sightings` (GET) Endpoint:
+        - [ ] **3.3.B.1:** Define Pydantic model for a single sighting record in response (e.g., `SightingRecord`).
+        - [ ] **3.3.B.2:** Define Pydantic response model for a list of sightings with pagination info (e.g., `SightingsResponse`).
+        - [ ] **3.3.B.3:** Create path operation function.
+        - [ ] **3.3.B.4:** Define query parameters (FastAPI `Query`) for: `limit`, `offset`, `start_date`, `end_date`, `shape`, `state`, `country`, `sort_by`, `sort_order` with defaults and validation. (Tool: Context7 for FastAPI `Query`)
+        - [ ] **3.3.B.5:** Create a copy of the main DataFrame for filtering to avoid modifying the original.
+        - [ ] **3.3.B.6:** Implement date range filtering logic.
+            - [ ] **3.3.B.6.1:** Edge Case: Handle if only `start_date` or only `end_date` is provided.
+            - [ ] **3.3.B.6.2:** Edge Case: Validate date formats (Pydantic helps).
+        - [ ] **3.3.B.7:** Implement shape filtering logic (case-insensitive).
+        - [ ] **3.3.B.8:** Implement state filtering logic (case-insensitive).
+        - [ ] **3.3.B.9:** Implement country filtering logic (case-insensitive).
+        - [ ] **3.3.B.10:** Implement sorting logic based on `sort_by` and `sort_order`.
+            - [ ] **3.3.B.10.1:** Edge Case: Handle invalid `sort_by` column name.
+        - [ ] **3.3.B.11:** Implement pagination logic using `offset` and `limit`.
+        - [ ] **3.3.B.12:** Calculate total count of filtered items (for pagination metadata).
+        - [ ] **3.3.B.13:** Populate and return the `SightingsResponse` model.
+        - [ ] **3.3.B.14:** Add basic try-except.
+    - [ ] **3.3.C:** `/summary-metrics` (GET) Endpoint:
+        - [ ] **3.3.C.1:** Define Pydantic response model for summary metrics (e.g., `SummaryMetricsResponse`).
+        - [ ] **3.3.C.2:** Create path operation function.
+        - [ ] **3.3.C.3:** Define query parameters for filtering (consistent with `/sightings`).
+        - [ ] **3.3.C.4:** Apply filters to a DataFrame copy (similar to `/sightings`).
+        - [ ] **3.3.C.5:** Implement logic to calculate `total_sightings`.
+        - [ ] **3.3.C.6:** Implement logic to calculate `most_common_shape`.
+            - [ ] **3.3.C.6.1:** Edge Case: Handle ties or no shapes found.
+        - [ ] **3.3.C.7:** Implement logic to calculate `busiest_month` (month with most sightings).
+            - [ ] **3.3.C.7.1:** Edge Case: Handle ties or no sightings.
+        - [ ] **3.3.C.8:** Populate and return `SummaryMetricsResponse`.
+        - [ ] **3.3.C.9:** Add basic try-except.
+    - [ ] **3.3.D:** `/ai-query` (POST) Endpoint:
+        - [ ] **3.3.D.1:** Define Pydantic request model (`AIQueryRequest` with `query_text`).
+        - [ ] **3.3.D.2:** Define Pydantic response model (`AIQueryResponse` with `answer_text`, optional `updated_filters`, `visualization_hint`).
+        - [ ] **3.3.D.3:** Create path operation function.
+        - [ ] **3.3.D.4:** Implement rule-based parsing for "how many in [state/country]?" query.
+        - [ ] **3.3.D.5:** Implement rule-based parsing for "show [shape] in [state/country]?" query.
+        - [ ] **3.3.D.6:** Implement logic to call appropriate data filtering/metric functions based on parsed query.
+        - [ ] **3.3.D.7:** Formulate textual answer.
+        - [ ] **3.3.D.8:** Populate `updated_filters` if query implies filter changes.
+        - [ ] **3.3.D.9:** Populate and return `AIQueryResponse`.
+        - [ ] **3.3.D.10:** Edge Case: Implement default response for unmatchable queries.
+        - [ ] **3.3.D.11:** Add basic try-except.
+- [ ] **3.6:** Pydantic Models for All Request/Response Validation Implemented and Verified (double-check all fields, types, optionality).
+- [ ] **3.7:** OpenAPI Specification Generation in FastAPI Configured and Verified:
+    - [ ] **3.7.1:** Customize OpenAPI metadata in `main.py` (title, version, description, server URL placeholder).
+    - [ ] **3.7.2:** Test local FastAPI server (`uvicorn app.main:app --reload`).
+    - [ ] **3.7.3:** Access and review `/docs` (Swagger UI).
+    - [ ] **3.7.4:** Access and review `/redoc` (ReDoc UI).
+    - [ ] **3.7.5:** Access and save `/openapi.json`. Validate against `04-API-Documentation-Standards.md`.
+- [ ] **3.8:** Backend Unit Tests Developed and Passing using `pytest`:
+    - [ ] **3.8.1:** Install `pytest` and `httpx` (`pip install pytest httpx`).
+    - [ ] **3.8.2:** Create `tests/test_main.py` (or similar).
+    - [ ] **3.8.3:** Import `TestClient` from `fastapi.testclient`.
+    - [ ] **3.8.4:** Write test for `/filter-options` (status code, response structure).
+    - [ ] **3.8.5:** Write tests for `/sightings`:
+        - [ ] **3.8.5.1:** Test with no filters (status code, basic response structure).
+        - [ ] **3.8.5.2:** Test with date filter (verify results).
+        - [ ] **3.8.5.3:** Test with shape filter.
+        - [ ] **3.8.5.4:** Test with state filter.
+        - [ ] **3.8.5.5:** Test with country filter.
+        - [ ] **3.8.5.6:** Test with combined filters.
+        - [ ] **3.8.5.7:** Test pagination (`limit`, `offset`).
+        - [ ] **3.8.5.8:** Test sorting.
+        - [ ] **3.8.5.9:** Test with invalid filter parameter type (expect 422).
+    - [ ] **3.8.6:** Write tests for `/summary-metrics`:
+        - [ ] **3.8.6.1:** Test with no filters.
+        - [ ] **3.8.6.2:** Test with specific filters and verify metric calculations.
+    - [ ] **3.8.7:** Write tests for `/ai-query`:
+        - [ ] **3.8.7.1:** Test a query matching "how many" rule.
+        - [ ] **3.8.7.2:** Test a query matching "show shape" rule.
+        - [ ] **3.8.7.3:** Test an unmatchable query.
+    - [ ] **3.8.8:** Run all tests (`pytest -v`). Ensure all pass.
+- [ ] **3.9:** `Dockerfile` for Backend Application Created and Tested Locally:
+    - [ ] **3.9.1:** Create `Dockerfile` in `backend/` directory.
+    - [ ] **3.9.2:** Add `COPY ./app/data/nuforc_data.parquet /usr/src/app/app/data/nuforc_data.parquet` to Dockerfile.
+    - [ ] **3.9.3:** Build Docker image: `docker build -t ufo-api:latest ./backend/`.
+    - [ ] **3.9.4:** Run container: `docker run -p 8000:80 ufo-api:latest`. (Note: Cloud Run uses $PORT, often 8080, Dockerfile uses 80 here for simplicity, adjust if needed).
+    - [ ] **3.9.5:** Test API endpoints on `http://localhost:8000` from host machine.
+    - [ ] **3.9.6:** Stop container.
+- [ ] **3.10:** `requirements.txt` Finalized with pinned/compatible versions.
+    - [ ] **3.10.1:** Run `pip freeze > backend/requirements.txt` from activated venv.
+    - [ ] **3.10.2:** Review `requirements.txt` for correctness.
 
 ### Phase 4: Davia SDK Integration & Frontend Configuration
 - [ ] **4.1:** Davia SDK Familiarization for UI Mapping Completed.
-    - [ ] **4.1.1:** Review Davia documentation on OpenAPI consumption for UI generation. (Tool: Tavily for Davia official docs)
-    - [ ] **4.1.2:** Understand mapping of OpenAPI paths/parameters/schemas to Davia UI components.
+    - [ ] **4.1.1:** Re-review Davia documentation on OpenAPI to UI generation. (Tool: Tavily)
+    - [ ] **4.1.2:** Identify how Davia maps OpenAPI `summary`, `description`, `tags` to UI.
+    - [ ] **4.1.3:** Identify how Davia maps query parameters to filter UI elements.
+    - [ ] **4.1.4:** Identify how Davia maps response schemas to display elements/charts.
 - [ ] **4.2:** Backend API's `openapi.json` Verified as Accessible and Correct for Davia.
-    - [ ] **4.2.1:** Ensure deployed/local backend's `/openapi.json` is reachable and valid.
-    - [ ] **4.2.2:** Manually inspect `openapi.json` against `04-API-Documentation-Standards.md`.
-    - [ ] **4.2.3:** Use Davia's validator/preview tool for the OpenAPI spec, if available.
+    - [ ] **4.2.1:** Ensure local/deployed backend's `/openapi.json` is reachable.
+    - [ ] **4.2.2:** Validate `openapi.json` using an online validator or IDE plugin.
+    - [ ] **4.2.3:** If Davia has a preview/validation tool, use it with the `/openapi.json` URL.
 - [ ] **4.3:** Davia Platform Configured.
-    - [ ] **4.3.1:** Input backend API URL (and `/openapi.json` path) into Davia platform.
-    - [ ] **4.3.2:** Configure Davia UI elements/layout if options exist.
-        - [ ] **4.3.2.1:** Edge Case: Address scenarios where Davia's default UI mapping isn't ideal; explore customization.
-    - [ ] **4.3.3:** Test basic frontend generation with a minimal set of API endpoints.
+    - [ ] **4.3.1:** Log in to Davia platform.
+    - [ ] **4.3.2:** Create new Davia app project.
+    - [ ] **4.3.3:** Input backend API's `/openapi.json` URL (from local test server or deployed GCR).
+    - [ ] **4.3.4:** Configure Davia UI elements/layout if options exist (e.g., chart types, filter placement).
+    - [ ] **4.3.5:** Test basic frontend generation with one or two API endpoints.
+        - [ ] **4.3.5.1:** Edge Case: If UI generation fails, check Davia logs/errors and cross-reference with `openapi.json` structure.
 
 ### Phase 5: Deployment
 - [ ] **5.1:** Backend Deployed to Google Cloud Run.
-    - [ ] **5.1.1:** GCP project setup verified (APIs enabled: Cloud Run, Artifact Registry, Cloud Build).
-    - [ ] **5.1.2:** `gcloud` CLI and Docker authenticated with GCP.
-    - [ ] **5.1.3:** Docker Image Built (as per 3.9.3).
-    - [ ] **5.1.4:** Docker Image Pushed to GCR/Artifact Registry. (Tool: Context7 for `gcloud artifacts docker push` or `docker push` to GCR)
-    - [ ] **5.1.5:** Deploy to Cloud Run using `gcloud run deploy`. (Tool: Context7 for `gcloud run deploy` examples)
-        - [ ] **5.1.5.1:** Configure region, platform, memory, CPU, port, `--allow-unauthenticated`.
-        - [ ] **5.1.5.2:** Edge Case: Handle deployment failures (check Cloud Build/Run logs).
-        - [ ] **5.1.5.3:** Edge Case: Verify IAM permissions for Cloud Run service account (minimal needed).
-    - [ ] **5.1.6:** Backend Deployment Verified: API accessible via Cloud Run URL, `/openapi.json` serves correctly.
+    - [ ] **5.1.1:** GCP project selected, billing enabled. APIs (Cloud Run, Artifact Registry, Cloud Build) confirmed enabled.
+    - [ ] **5.1.2:** `gcloud auth configure-docker` executed for the target region.
+    - [ ] **5.1.3:** Docker Image Re-built with any final changes: `docker build -t YOUR_GCP_REGION-docker.pkg.dev/YOUR_GCP_PROJECT_ID/YOUR_REPO_NAME/ufo-api:v1 ./backend/`.
+    - [ ] **5.1.4:** Docker Image Pushed: `docker push YOUR_GCP_REGION-docker.pkg.dev/YOUR_GCP_PROJECT_ID/YOUR_REPO_NAME/ufo-api:v1`.
+    - [ ] **5.1.5:** Deploy to Cloud Run: `gcloud run deploy ufo-sightings-api --image YOUR_IMAGE_URL:v1 --platform managed --region YOUR_REGION --allow-unauthenticated --port 8080 --memory 512Mi --cpu 1`. (Adjust port if Dockerfile EXPOSEs differently and CMD uses $PORT).
+    - [ ] **5.1.6:** Note the generated Cloud Run service URL.
+    - [ ] **5.1.7:** Test Cloud Run URL + `/openapi.json` in browser.
+    - [ ] **5.1.8:** Test a few API endpoints on Cloud Run URL using Postman/curl.
 - [ ] **5.2:** Frontend Deployed to Vercel.
-    - [ ] **5.2.1:** Davia Deployment Process Followed / Manual Setup Completed.
-    - [ ] **5.2.2:** Vercel project environment variables configured for live backend API URL.
-        - [ ] **5.2.2.1:** Edge Case: Ensure correct variable names if Davia frontend expects specific ones.
-    - [ ] **5.2.3:** Vercel deployment triggered and successful.
-    - [ ] **5.2.4:** Frontend Deployment Verified: Application accessible via Vercel URL, successfully calls backend.
-        - [ ] **5.2.4.1:** Edge Case: Troubleshoot CORS issues if they appear despite GCR/Vercel defaults.
+    - [ ] **5.2.1:** Davia Deployment Process for Vercel initiated (if it exists).
+    - [ ] **5.2.2:** OR: Vercel project created and linked to GitHub repository.
+    - [ ] **5.2.3:** Vercel build settings configured (framework preset, build command, output dir - if not auto-detected from Davia output).
+    - [ ] **5.2.4:** Vercel environment variable `API_BASE_URL` (or similar, as expected by Davia frontend) set to the Cloud Run service URL.
+    - [ ] **5.2.5:** Trigger Vercel deployment (usually automatic on git push to main/master).
+    - [ ] **5.2.6:** Note the Vercel production URL.
+    - [ ] **5.2.7:** Test Vercel URL in browser. Check for basic functionality and API calls in browser dev tools network tab.
+        - [ ] **5.2.7.1:** Edge Case: If API calls fail, check Vercel function logs and browser console for errors (CORS, incorrect API URL). (Tool: AgentDeskAI Browser Tools MCP `getConsoleErrors`, `getNetworkErrors`)
 
-### Phase 6: Testing & Quality Assurance
-- [ ] **6.1:** All Backend Unit Tests Passing against code identical to deployed.
-- [ ] **6.2:** API Integration Testing Completed against deployed Cloud Run backend.
-    - [ ] **6.2.1:** Use Postman/Insomnia to test all endpoints with diverse valid/invalid inputs.
-    - [ ] **6.2.2:** Verify response codes, headers, and body schemas against OpenAPI spec.
-- [ ] **6.3:** Frontend Functional Testing Completed on deployed Vercel app.
-    - [ ] **6.3.1:** Systematically test all UI elements as per `06-Testing-Strategy-Document.md`.
-    - [ ] **6.3.2:** Test diverse filter combinations and their impact on data/visualizations.
-        - [ ] **6.3.2.1:** Edge Case: Test empty result sets from filters.
-        - [ ] **6.3.2.2:** Edge Case: Test behavior with no filters applied.
-        - [ ] **6.3.2.3:** Edge Case: Test UI behavior with very large result sets (if applicable within demo data).
-    - [ ] **6.3.3:** Test AI assistant with various queries (valid, invalid, edge cases like ambiguous phrasing).
-    - [ ] **6.3.4:** Check UI responsiveness, visual consistency, and absence of console errors.
-    - [ ] **6.3.5:** Test on 1-2 different modern browsers.
-- [ ] **6.4:** User Acceptance Testing (UAT) Completed (self-conducted against PRD and user stories).
-    - [ ] **6.4.1:** Validate each user story from `01-Product-Requirements-Document.md`.
-    - [ ] **6.4.2:** Assess overall usability and fulfillment of the "job application project" goal.
-- [ ] **6.5:** Major Bugs and Issues Documented, Prioritized, Iterated, and Fixed.
-    - [ ] **6.5.1:** Maintain a simple bug log.
-    - [ ] **6.5.2:** Re-test fixes thoroughly.
-- [ ] **6.6:** Post-Deployment Checks on Live Environment Completed.
-    - [ ] **6.6.1:** Final quick run-through of key features.
-    - [ ] **6.6.2:** Review Vercel and Cloud Run logs for any new/unforeseen errors.
+### Phase 6: Testing & Quality Assurance - Ultra Granular
+- [ ] **6.1:** All Backend Unit Tests (`pytest`) Passing against code identical to deployed.
+- [ ] **6.2:** API Integration Testing (Postman/Insomnia against deployed Cloud Run backend):
+    - [ ] **6.2.1:** Test `/filter-options`: Check status 200, verify response schema, check sample data.
+    - [ ] **6.2.2:** Test `/sightings` (no params): Check status 200, schema, default limit.
+    - [ ] **6.2.3:** Test `/sightings` with each filter param individually: Verify correct filtering.
+    - [ ] **6.2.4:** Test `/sightings` with multiple combined filter params.
+    - [ ] **6.2.5:** Test `/sightings` pagination (`limit`, `offset`): Verify correct slicing of data.
+    - [ ] **6.2.6:** Test `/sightings` sorting (asc/desc for a date/numeric field).
+    - [ ] **6.2.7:** Test `/sightings` with invalid param values (expect 422 or graceful handling).
+    - [ ] **6.2.8:** Test `/summary-metrics` (no params): Check status 200, schema.
+    - [ ] **6.2.9:** Test `/summary-metrics` with filters: Verify metric calculations.
+    - [ ] **6.2.10:** Test `/ai-query` (POST):
+        - [ ] **6.2.10.1:** Send valid query for "how many". Verify response.
+        - [ ] **6.2.10.2:** Send valid query for "show shape". Verify response.
+        - [ ] **6.2.10.3:** Send unmatchable query. Verify polite error/default response.
+        - [ ] **6.2.10.4:** Send request with invalid JSON body (expect 422).
+- [ ] **6.3:** Frontend Functional Testing (Manual on deployed Vercel app):
+    - [ ] **6.3.1:** Launch Vercel app in browser. (Tool: `browser_action` launch)
+    - [ ] **6.3.2:** Initial Page Load:
+        - [ ] **6.3.2.1:** Verify all expected UI elements (filters, map placeholder, metrics placeholder, AI input) are visible. (Tool: `browser_action` screenshot, visual inspection)
+        - [ ] **6.3.2.2:** Check browser console for initial load errors. (Tool: AgentDeskAI Browser Tools MCP `getConsoleErrors`)
+        - [ ] **6.3.2.3:** Check network tab for failed API calls to `/filter-options` or initial `/sightings`. (Tool: AgentDeskAI Browser Tools MCP `getNetworkErrors`)
+    - [ ] **6.3.3:** Filter Controls Testing:
+        - [ ] **6.3.3.1:** Date Range Filter: Test selecting start/end dates. Verify map/metrics update. (Tool: `browser_action` click/type, screenshot)
+        - [ ] **6.3.3.2:** Shape Dropdown: Test selecting a shape. Verify map/metrics update.
+        - [ ] **6.3.3.3:** State Dropdown: Test selecting a state.
+        - [ ] **6.3.3.4:** Country Dropdown: Test selecting a country.
+        - [ ] **6.3.3.5:** Combined Filters: Test selecting multiple filters. Verify AND logic.
+        - [ ] **6.3.3.6:** Clear/Reset Filters: Test if filters can be cleared and data resets.
+        - [ ] **6.3.3.7:** Edge Case: Test filter interactions leading to no results. Verify UI feedback (e.g., "No sightings found").
+    - [ ] **6.3.4:** Map/Visualization Testing:
+        - [ ] **6.3.4.1:** Verify map displays data points correctly after filtering.
+        - [ ] **6.3.4.2:** (If applicable) Verify tooltips or interactions on map points.
+    - [ ] **6.3.5:** Summary Metrics Display:
+        - [ ] **6.3.5.1:** Verify displayed metrics match expected values based on current filters.
+    - [ ] **6.3.6:** AI Assistant Input:
+        - [ ] **6.3.6.1:** Type and submit a "how many" query. Verify textual response. (Tool: `browser_action` type/click, screenshot)
+        - [ ] **6.3.6.2:** Type and submit a "show shape" query. Verify map/filters update and/or textual response.
+        - [ ] **6.3.6.3:** Type and submit an unmatchable query. Verify polite UI response.
+        - [ ] **6.3.6.4:** Edge Case: Test submitting empty query.
+    - [ ] **6.3.7:** Responsiveness & UI:
+        - [ ] **6.3.7.1:** Check for reasonable load times between interactions.
+        - [ ] **6.3.7.2:** Check for visual consistency, no obvious layout breaks.
+        - [ ] **6.3.7.3:** Test on one primary browser (e.g., Chrome) and one alternative (e.g., Firefox).
+    - [ ] **6.3.8:** Close browser session. (Tool: `browser_action` close)
+- [ ] **6.4:** User Acceptance Testing (UAT) (self-conducted):
+    - [ ] **6.4.1:** Go through each user story in `01-Product-Requirements-Document.md` and verify it's met.
+    - [ ] **6.4.2:** Assess if the app is intuitive and achieves the "creative and thoughtful use of SDK" goal.
+- [ ] **6.5:** Bug Logging, Fixing, and Regression Testing:
+    - [ ] **6.5.1:** Create a simple list/spreadsheet for bugs (Description, Steps, Expected, Actual, Severity, Status).
+    - [ ] **6.5.2:** Prioritize critical/high severity bugs.
+    - [ ] **6.5.3:** For each fix: Isolate cause, implement code change, unit test fix, commit fix.
+    - [ ] **6.5.4:** Re-deploy backend/frontend if necessary after fixes.
+    - [ ] **6.5.5:** Re-test the specific bug on the deployed environment.
+    - [ ] **6.5.6:** Perform quick regression tests on related functionality.
+- [ ] **6.6:** Post-Deployment Sanity Checks:
+    - [ ] **6.6.1:** One final quick walkthrough of main features on live Vercel URL.
+    - [ ] **6.6.2:** Briefly check Vercel deployment logs and Cloud Run service logs for any new critical errors. (Tool: AgentDeskAI Browser Tools MCP `getConsoleErrors` on Vercel URL)
 
 ### Phase 7: Project Finalization & Submission
-- [ ] **7.1:** All Documentation Finalized and Reviewed.
-    - [ ] **7.1.1:** Ensure all checklist items in this document are addressed.
-    - [ ] **7.1.2:** Proofread all markdown files for clarity, grammar, and consistency.
-    - [ ] **7.1.3:** Verify all internal document links and links to external resources (like GitHub).
-- [ ] **7.2:** Codebase Reviewed for Quality, Comments, and Structure.
-    - [ ] **7.2.1:** Ensure Python code adheres to PEP 8.
-    - [ ] **7.2.2:** Add/review comments for complex code sections.
-    - [ ] **7.2.3:** Remove debug code, unused variables/imports, and temporary files.
-    - [ ] **7.2.4:** Ensure `.gitignore` is comprehensive.
-- [ ] **7.3:** Submission Email Drafted.
-    - [ ] **7.3.1:** Clearly state the purpose: "Data Scientist Application - [Your Name] - Data App Submission".
-    - [ ] **7.3.2:** Provide live Vercel application URL.
-    - [ ] **7.3.3:** Provide GitHub repository URL.
-    - [ ] **7.3.4:** Briefly highlight key features, technologies, design choices, and how it demonstrates "creativity and thoughtful use of the Davia SDK".
-- [ ] **7.4:** Application Submitted.
-    - [ ] **7.4.1:** Double-check recipient email address and all links.
-    - [ ] **7.4.2:** Send.
-    - [ ] **7.4.3:** (Optional) Monitor app logs for a short period post-submission for any immediate issues during evaluation.
+- [ ] **7.1:** All Documentation Finalized and Reviewed:
+    - [ ] **7.1.1:** Confirm all checklist items in this document are marked complete or N/A.
+    - [ ] **7.1.2:** Proofread all `.md` files for typos, grammar, clarity.
+    - [ ] **7.1.3:** Verify all internal markdown links work.
+    - [ ] **7.1.4:** Verify external links (GitHub, Davia docs) are correct.
+    - [ ] **7.1.5:** Ensure consistent formatting across documents.
+- [ ] **7.2:** Codebase Reviewed for Quality, Comments, and Structure:
+    - [ ] **7.2.1:** Run a Python linter (e.g., Flake8, Pylint) on backend code and address major issues. (Tool: `execute_command` with linter)
+    - [ ] **7.2.2:** Ensure complex functions/logic have explanatory comments.
+    - [ ] **7.2.3:** Remove all `print()` statements used for debugging.
+    - [ ] **7.2.4:** Remove any commented-out old code unless it's for a specific documented reason.
+    - [ ] **7.2.5:** Ensure `.gitignore` is up-to-date and effective.
+    - [ ] **7.2.6:** Final commit of all code and documentation changes to GitHub.
+- [ ] **7.3:** Submission Email Drafted:
+    - [ ] **7.3.1:** Subject: "Data Scientist Application - [Your Name] - Data App Submission".
+    - [ ] **7.3.2:** Body: Polite introduction.
+    - [ ] **7.3.3:** Clearly list Vercel application URL.
+    - [ ] **7.3.4:** Clearly list GitHub repository URL.
+    - [ ] **7.3.5:** Write a concise paragraph highlighting:
+        - The project's purpose (UFO data explorer).
+        - Key features implemented (interactive filters, map, metrics, AI assistant).
+        - Technologies used (Davia SDK, FastAPI, Python, Pandas, Vercel, GCP).
+        - How it demonstrates "creativity and thoughtful use of the Davia SDK" (e.g., choice of dataset, AI interaction, clean UI generated via OpenAPI).
+    - [ ] **7.3.6:** Polite closing.
+    - [ ] **7.3.7:** Proofread email.
+- [ ] **7.4:** Application Submitted:
+    - [ ] **7.4.1:** Verify recipient email address from job posting (contact@davia.ai).
+    - [ ] **7.4.2:** Send the email.
+    - [ ] **7.4.3:** (Optional) Briefly monitor Vercel/Cloud Run logs for a few hours/days for any access or errors during evaluation.
 
 ---
 This checklist is a living document and should be updated as tasks are completed.
