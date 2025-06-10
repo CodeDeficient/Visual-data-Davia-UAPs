@@ -24,7 +24,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
 ### Phase 2: Data Acquisition & Preprocessing (Assumed largely complete based on previous work, minor checks)
 - [ ] **2.1 - 2.5:** Verify all sub-tasks for Data Acquisition & Preprocessing are complete and documented in `05-Data-Schema-and-Preprocessing.md`.
     - [ ] **2.X.1:** Confirm `nuforc_data.parquet` exists and is accessible.
-        - [ ] **2.X.1.1:** [RISK: 5/10] Data source (Kaggle) becomes unavailable or changes format.
+        - [ ] **2.X.1.1:** [RISK: 3/10] Data source (Kaggle) becomes unavailable or changes format.
         - [ ] **2.X.1.2:** [MITIGATION] Have a local copy of the downloaded raw CSV and the final `nuforc_data.parquet`. Document the source URL and access date.
     - [ ] **2.X.2:** Briefly review preprocessing script logic (if a separate script was used) for clarity and correctness.
         - [ ] **2.X.2.1:** [RISK: 4/10] Errors in preprocessing logic leading to incorrect data.
@@ -42,10 +42,10 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
 - [ ] **3.2:** Initial FastAPI Configuration:
     - [ ] **3.2.1:** Implement CORS (Cross-Origin Resource Sharing) middleware in `app/main.py`. (Tool: Context7 for FastAPI CORS)
         - [ ] **3.2.1.1:** Define allowed origins (start with `"*"` for development, refine for production if possible, though Vercel might be dynamic).
-        - [ ] **3.2.1.2:** [RISK: 6/10] Incorrect CORS setup blocking frontend requests.
+        - [ ] **3.2.1.2:** [RISK: 4/10] Incorrect CORS setup blocking frontend requests.
         - [ ] **3.2.1.3:** [MITIGATION] Test with frontend early. Check browser console for CORS errors.
     - [ ] **3.2.2:** Implement a global exception handler in `app/main.py` to return structured JSON errors. (Tool: Context7 for FastAPI exception handlers)
-        - [ ] **3.2.2.1:** [RISK: 7/10] Unhandled exceptions leaking stack traces or causing non-JSON responses.
+        - [ ] **3.2.2.1:** [RISK: 3/10] Unhandled exceptions leaking stack traces or causing non-JSON responses.
         - [ ] **3.2.2.2:** [MITIGATION] Ensure all known exceptions are caught and a generic handler for `Exception` returns a 500 error.
         - [ ] **3.2.2.3:** [SECURITY] Avoid leaking sensitive error details in production responses.
 - [ ] **3.3:** Data Loading Mechanism (`nuforc_data.parquet`):
@@ -53,12 +53,12 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
     - [ ] **3.3.2:** Design data loading strategy: FastAPI lifespan event (on startup).
     - [ ] **3.3.3:** Implement data loading function in `app/main.py` or a utility module (e.g., `app/data_loader.py`). (Tool: Context7 for Pandas `read_parquet`)
     - [ ] **3.3.4:** Implement error handling for `FileNotFoundError` during data load within the loading function.
-        - [ ] **3.3.4.1:** [RISK: 6/10] Application fails to start if data file is missing.
+        - [ ] **3.3.4.1:** [RISK: 3/10] Application fails to start if data file is missing.
         - [ ] **3.3.4.2:** [MITIGATION] Log error clearly and exit gracefully or prevent app startup.
     - [ ] **3.3.5:** Implement FastAPI lifespan event in `app/main.py` to load data on startup. (Tool: Context7 for FastAPI lifespan)
     - [ ] **3.3.6:** Make DataFrame accessible to path operations (e.g., global variable in `main.py`, or via a dependency).
     - [ ] **3.3.7:** Log the time taken to load the data.
-        - [ ] **3.3.7.1:** [RISK: 5/10] Large data file causing slow application startup.
+        - [ ] **3.3.7.1:** [RISK: 3/10] Large data file causing slow application startup.
         - [ ] **3.3.7.2:** [MITIGATION] Parquet format is efficient. If startup is too slow, investigate further data reduction or alternative loading.
 - [ ] **3.4:** Core API Endpoints Development:
     - [ ] **3.4.A:** `/filter-options` (GET) Endpoint:
@@ -89,7 +89,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
         - [ ] **3.4.B.12:** Implement pagination logic using `offset` and `limit` on the filtered, sorted DataFrame.
         - [ ] **3.4.B.13:** Populate and return the `SightingsResponse` model.
         - [ ] **3.4.B.14:** Add specific try-except block.
-        - [ ] **3.4.B.15:** [RISK: 6/10] Performance issues with complex filter combinations on large data.
+        - [ ] **3.4.B.15:** [RISK: 4/10] Performance issues with complex filter combinations on large data.
         - [ ] **3.4.B.16:** [MITIGATION] Use efficient Pandas operations. Test with full dataset. Consider indexing if it were a database. For Pandas, ensure data types are optimal.
     - [ ] **3.4.C:** `/summary-metrics` (GET) Endpoint:
         - [ ] **3.4.C.1:** Define Pydantic response model for summary metrics (e.g., `SummaryMetricsResponse` with `total_sightings`, `most_common_shape`, `busiest_month`).
@@ -117,11 +117,11 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
         - [ ] **3.4.D.11:** Edge Case: Implement default response for unmatchable queries (e.g., "Sorry, I can't answer that question.").
         - [ ] **3.4.D.12:** Add specific try-except block.
         - [ ] **3.4.D.13:** [SECURITY] Ensure rule-based parsing does not execute arbitrary code or unsanitized input directly. Rules should map to safe, predefined actions.
-        - [ ] **3.4.D.14:** [RISK: 5/10] Rule-based AI logic becomes overly complex or brittle.
+        - [ ] **3.4.D.14:** [RISK: 4/10] Rule-based AI logic becomes overly complex or brittle.
         - [ ] **3.4.D.15:** [MITIGATION] Keep rules simple and targeted. Document each rule clearly. Prioritize common, high-value questions.
 - [ ] **3.5:** Pydantic Models for All Request/Response Validation Implemented and Verified.
     - [ ] **3.5.1:** Review all Pydantic models for correct field types, optionality, and validation constraints (e.g., `gt`, `lt` for numbers).
-    - [ ] **3.5.2:** [RISK: 6/10] Incorrect or incomplete Pydantic models leading to data validation issues or security bypasses.
+    - [ ] **3.5.2:** [RISK: 3/10] Incorrect or incomplete Pydantic models leading to data validation issues or security bypasses.
     - [ ] **3.5.3:** [MITIGATION] Thoroughly test with valid and invalid inputs. Use FastAPI's automatic request validation and `/docs` to review schemas.
 - [ ] **3.6:** OpenAPI Specification Generation in FastAPI Configured and Verified:
     - [ ] **3.6.1:** Customize OpenAPI metadata in `main.py` (title, version, description, contact, license, server URL placeholder).
@@ -130,7 +130,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
     - [ ] **3.6.4:** Access and review `/redoc` (ReDoc UI).
     - [ ] **3.6.5:** Access and save `/openapi.json`. Validate its structure using an online validator.
     - [ ] **3.6.6:** Compare `/openapi.json` against `04-API-Documentation-Standards.md`.
-    - [ ] **3.6.7:** [RISK: 6/10] Incomplete or incorrect OpenAPI spec misleads Davia UI generation.
+    - [ ] **3.6.7:** [RISK: 4/10] Incomplete or incorrect OpenAPI spec misleads Davia UI generation.
     - [ ] **3.6.8:** [MITIGATION] Iteratively refine Pydantic models and FastAPI route summaries/descriptions to improve the spec. Test with Davia early.
 - [ ] **3.7:** Backend Unit Tests Developed and Passing using `pytest`:
     - [ ] **3.7.1:** Install `pytest` and `httpx` (`pip install pytest httpx`). Add to `requirements-dev.txt`.
@@ -157,7 +157,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
         - [ ] **3.7.7.3:** Test an unmatchable query (expect default polite response).
     - [ ] **3.7.8:** Run all tests (`pytest -v` from `backend/` directory). Ensure all pass.
     - [ ] **3.7.9:** Aim for reasonable test coverage (e.g., >70%). (Tool: `pytest-cov`)
-    - [ ] **3.7.10:** [RISK: 7/10] Insufficient test coverage leading to undetected bugs in production.
+    - [ ] **3.7.10:** [RISK: 4/10] Insufficient test coverage leading to undetected bugs in production.
     - [ ] **3.7.11:** [MITIGATION] Write tests for positive cases, negative cases (invalid input), and edge conditions for each endpoint and key logic.
 - [ ] **3.8:** `Dockerfile` for Backend Application Created and Tested Locally:
     - [ ] **3.8.1:** Create `Dockerfile` in `backend/` directory.
@@ -171,7 +171,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
     - [ ] **3.8.7:** Set `EXPOSE 80` (or port matching Uvicorn command).
     - [ ] **3.8.8:** Set `CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]` (Cloud Run will inject `$PORT`, Uvicorn should use it if available, or default to 80/8080).
     - [ ] **3.8.9:** Build Docker image: `docker build -t ufo-api:latest ./backend/`.
-        - [ ] **3.8.9.1:** [RISK: 6/10] Docker build failures due to incorrect Dockerfile instructions.
+        - [ ] **3.8.9.1:** [RISK: 3/10] Docker build failures due to incorrect Dockerfile instructions.
         - [ ] **3.8.9.2:** [MITIGATION] Build and test locally iteratively.
     - [ ] **3.8.10:** Run container: `docker run -p 8000:80 ufo-api:latest`. (Adjust host port if 8000 is taken).
     - [ ] **3.8.11:** Test API endpoints on `http://localhost:8000` from host machine.
@@ -181,10 +181,10 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
 - [ ] **3.9:** `requirements.txt` Finalized with pinned/compatible versions.
     - [ ] **3.9.1:** Run `pip freeze > backend/requirements.txt` from activated venv after all dependencies are stable.
     - [ ] **3.9.2:** Review `backend/requirements.txt` for correctness and remove unnecessary packages (e.g., linters, test tools if not needed in prod image).
-    - [ ] **3.9.3:** [RISK: 6/10] Unpinned dependencies leading to breaking changes in future builds.
+    - [ ] **3.9.3:** [RISK: 2/10] Unpinned dependencies leading to breaking changes in future builds.
     - [ ] **3.9.4:** [MITIGATION] Always use pinned versions from `pip freeze`.
     - [ ] **3.9.5:** [SECURITY] Review dependencies for known vulnerabilities. (Tool: `pip-audit check -r backend/requirements.txt` or Snyk/Dependabot if using GitHub integration).
-        - [ ] **3.9.5.1:** [RISK: 7/10] Including vulnerable dependencies.
+        - [ ] **3.9.5.1:** [RISK: 4/10] Including vulnerable dependencies.
         - [ ] **3.9.5.2:** [MITIGATION] Regularly scan dependencies and update them.
 
 ### Phase 4: Davia SDK Integration & Frontend Configuration
@@ -193,7 +193,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
     - [ ] **4.1.2:** Identify how Davia maps OpenAPI `summary`, `description`, `tags`, `operationId` to UI elements and interactions.
     - [ ] **4.1.3:** Identify how Davia maps query parameters (especially types like `date`, `string` with `enum`) to filter UI elements.
     - [ ] **4.1.4:** Identify how Davia maps response schemas to display elements (tables, charts, text).
-    - [ ] **4.1.5:** [RISK: 7/10] Davia SDK has limitations or behaves unexpectedly with the generated OpenAPI spec.
+    - [ ] **4.1.5:** [RISK: 4/10] Davia SDK has limitations or behaves unexpectedly with the generated OpenAPI spec.
     - [ ] **4.1.6:** [MITIGATION] Start with a very simple OpenAPI spec and one endpoint. Test Davia integration. Incrementally add complexity. Be prepared to adjust OpenAPI spec (summaries, descriptions, Pydantic model structures) to better suit Davia's interpretation.
 - [ ] **4.2:** Backend API's `openapi.json` Verified as Accessible and Correct for Davia.
     - [ ] **4.2.1:** Ensure local (via ngrok/devtunnels if Davia is cloud) or deployed backend's `/openapi.json` is publicly reachable by Davia.
@@ -215,7 +215,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
     - [ ] **5.1.4:** Docker Image Re-built with any final changes: `docker build -t $IMAGE_URL ./backend/`.
     - [ ] **5.1.5:** Docker Image Pushed: `docker push $IMAGE_URL`.
     - [ ] **5.1.6:** Deploy to Cloud Run: `gcloud run deploy ufo-sightings-api --image $IMAGE_URL --platform managed --region YOUR_REGION --allow-unauthenticated --port 80 --memory 512Mi --cpu 1`. (Adjust port if Dockerfile EXPOSEs differently and CMD uses $PORT, GCR often defaults to 8080 for $PORT).
-        - [ ] **5.1.6.1:** [RISK: 7/10] GCP configuration errors (permissions, APIs not enabled, region issues).
+        - [ ] **5.1.6.1:** [RISK: 4/10] GCP configuration errors (permissions, APIs not enabled, region issues).
         - [ ] **5.1.6.2:** [MITIGATION] Follow GCP documentation carefully. Test permissions with simpler `gcloud` commands first.
         - [ ] **5.1.6.3:** [SECURITY] `--allow-unauthenticated` makes the API public. This is intended for this project. For sensitive apps, use IAM authentication via API Gateway or IAP. Document this choice.
     - [ ] **5.1.7:** Note the generated Cloud Run service URL.
@@ -227,7 +227,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
     - [ ] **5.2.3:** Vercel build settings configured (framework preset, build command, output dir - if not auto-detected from Davia output/integration).
     - [ ] **5.2.4:** Vercel environment variable `API_BASE_URL` (or similar, as expected by Davia-generated frontend) set to the Cloud Run service URL.
         - [ ] **5.2.4.1:** [SECURITY] Ensure `API_BASE_URL` uses HTTPS (Cloud Run URLs are HTTPS by default).
-        - [ ] **5.2.4.2:** [RISK: 7/10] Incorrect environment variable name or value causing API connection failure.
+        - [ ] **5.2.4.2:** [RISK: 3/10] Incorrect environment variable name or value causing API connection failure.
         - [ ] **5.2.4.3:** [MITIGATION] Double-check the exact variable name Davia frontend expects. Verify URL.
     - [ ] **5.2.5:** Trigger Vercel deployment (usually automatic on git push to main/master if linked).
     - [ ] **5.2.6:** Note the Vercel production URL.
@@ -252,7 +252,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
         - [ ] **6.2.10.2:** Send valid query for "show shape". Verify response.
         - [ ] **6.2.10.3:** Send unmatchable query. Verify polite error/default response.
         - [ ] **6.2.10.4:** Send request with invalid JSON body (expect 422).
-    - [ ] **6.2.11:** [RISK: 6/10] CORS issues appearing during integration testing despite earlier setup.
+    - [ ] **6.2.11:** [RISK: 4/10] CORS issues appearing during integration testing despite earlier setup.
     - [ ] **6.2.12:** [MITIGATION] Review FastAPI CORS config, Cloud Run settings (less likely), and ensure Vercel frontend sends correct `Origin` header.
 - [ ] **6.3:** Frontend Functional Testing (Manual on deployed Vercel app):
     - [ ] **6.3.1:** Launch Vercel app in browser. (Tool: `browser_action` launch)
@@ -283,7 +283,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
         - [ ] **6.3.7.2:** Check for visual consistency, no obvious layout breaks.
         - [ ] **6.3.7.3:** Test on one primary browser (e.g., Chrome) and one alternative (e.g., Firefox).
     - [ ] **6.3.8:** Close browser session. (Tool: `browser_action` close)
-    - [ ] **6.3.9:** [RISK: 8/10] Critical bugs missed during unit/integration testing found during manual frontend testing.
+    - [ ] **6.3.9:** [RISK: 4/10] Critical bugs missed during unit/integration testing found during manual frontend testing.
     - [ ] **6.3.10:** [MITIGATION] Follow this detailed testing checklist thoroughly. Log all issues.
 - [ ] **6.4:** User Acceptance Testing (UAT) (self-conducted):
     - [ ] **6.4.1:** Go through each user story/requirement in `01-Product-Requirements-Document.md` and verify it's met by the deployed application.
@@ -328,7 +328,7 @@ This checklist provides a highly detailed, atomic breakdown of key end-to-end de
         - Mention of the comprehensive documentation suite as evidence of a structured approach.
     - [ ] **7.3.6:** Polite closing.
     - [ ] **7.3.7:** Proofread email for typos, grammar, and clarity.
-    - [ ] **7.3.8:** [RISK: 3/10] Submission email contains broken links or typos.
+    - [ ] **7.3.8:** [RISK: 2/10] Submission email contains broken links or typos.
     - [ ] **7.3.9:** [MITIGATION] Double-check all URLs by copy-pasting into a browser. Read email aloud.
 - [ ] **7.4:** Application Submitted:
     - [ ] **7.4.1:** Verify recipient email address from job posting (contact@davia.ai).
